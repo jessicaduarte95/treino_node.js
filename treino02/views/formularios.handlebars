@@ -1,0 +1,12 @@
+
+<!--method -> forma como o formulário será enviado para o backend.
+envio pode ser por get (envia os dados pela URL), não é muito segura ou 
+post (não passa os dados pela URL)-->
+<!-- action = rota para onde os dados serão enviados.-->
+<form action="/add" method="POST">
+    <p>Título: </p>
+    <input type="text" name = "titulo">
+    <p>Conteúdo: </p>
+    <textarea name="conteudo" id="" cols="30" rows="30"></textarea>
+    <button type="submit" >Cadastrar Postagens</button>
+</form>
