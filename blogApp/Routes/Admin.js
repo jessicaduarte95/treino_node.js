@@ -14,7 +14,12 @@ router.get('/posts', (req,res) => {
 })
 
 router.get('/categorias', (req,res) => {
-    res.render('admin/categorias') // Traz o arquivo.
+    Categoria.find().lean().sort({date:'desc'}).then((categorias) => {
+        res.render('admin/categorias', {categorias: categorias}) // Traz o arquivo.
+    }).catch((erro) => {
+        req.flash('error_msg', 'Houve um erro ao listar as categorias.')
+        res.redirect('/admin')
+    }) // find -> serve para listar todos os documentos que existem.
 })
 
 router.post('/categorias/nova', (req,res) => {
