@@ -1,4 +1,5 @@
 const express = require("express");
+const res = require("express/lib/response");
 const router = express.Router() // Componente usado para criar rotas em arquivos separados.
 const mongoose = require("mongoose")
 require("../Models/Categoria")
@@ -53,6 +54,12 @@ router.post('/categorias/nova', (req,res) => {
     }
 
 
+})
+
+router.get("/categorias/edit", (req,res) => {
+    Categoria.findOne({_id:req.params.id}).lean().then((categoria)=>{
+        res.render('admin/editcategorias', {categoria:categoria})
+    })
 })
 
 router.get('/categorias/add', (req,res) => {
