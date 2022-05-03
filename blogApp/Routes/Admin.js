@@ -1,4 +1,5 @@
 const express = require("express");
+const { route } = require("express/lib/application");
 const res = require("express/lib/response");
 const router = express.Router() // Componente usado para criar rotas em arquivos separados.
 const mongoose = require("mongoose")
@@ -56,9 +57,35 @@ router.post('/categorias/nova', (req,res) => {
 
 })
 
-router.get("/categorias/edit", (req,res) => {
-    Categoria.findOne({_id:req.params.id}).lean().then((categoria)=>{
-        res.render('admin/editcategorias', {categoria:categoria})
+router.get("/categorias/edit/:id", (req,res) => {
+    Categoria.findOne({_id:req.params.id}).lean().then((categoria) => {
+        res.render('admin/editcategorias', {categoria: categoria})
+    }).catch((err) => {
+        req.flash("error_msg", "Esta categoria não existe.")
+        res.redirect("/admin/categorias")
+    })
+    // Categoria.findOne({_id:req.params.id}).lean().then((categoria)=>{
+    //     res.render('admin/editcategorias', {categoria:categoria})
+    // })
+})
+
+router.post("/categorias/edit", (req, res) => {
+    Categoria.findOne({_id: req.body.id}).then((categoria) => {
+
+        categoria.nome = req.body.nome
+        categoria.slug = req.body.slug
+
+        categoria.save().then(() => {
+            res.flash()("success", "Categoria editada com sucesso.")
+            res.redirect("/admin/categorias")
+        }).catch((err) => {
+            req.flash("error_msg", "Houve um erro interno ao salvar a edição da categoria.")
+            res.redirect("/admin/categorias")
+        })
+
+    }).catch((err) => {
+        req.flash("error_msg", "Houve um erro ao editar a categoria.")
+        res.redirect("/admin/categorias")
     })
 })
 
