@@ -105,7 +105,12 @@ router.get('/postagens', (req,res) => {
 })
 
 router.get('/postagens/add', (req,res) => {
-    res.render("admin/addPostagem")
+    Categoria.findOne().then((categorias) => {
+        res.render("admin/addPostagem", {categorias:categorias})
+    }).catch((err) => {
+        req.flash("error_msg", "Houve um erro ao carregar o formulário.")
+        res.redirect("/admin")
+    })
 })
 
 module.exports = router // É necessário exportar no final do arquivo.
